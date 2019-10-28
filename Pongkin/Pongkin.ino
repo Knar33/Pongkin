@@ -17,6 +17,8 @@ int leftScore;
 int rightScore;
 int startingPositions[][4] = { {7, 7}, {7, 8}, {8, 7}, {8, 8} };
 float ballSpeed = 0.003;
+int startingBallSpeed = 50;
+int ballSpeedUpRate = 5;
 
 void setup() {
   Serial.begin(9600);
@@ -53,7 +55,7 @@ void initializeBall() {
   ballXPos = (float)startingPositions[randomPosition][0];
   ballYPos = (float)startingPositions[randomPosition][1];
   
-  ballXVector = random(20, 128);
+  ballXVector = startingBallSpeed;
   int ballXMagnitude = random(0, 2);
   if (ballXMagnitude == 1) {
     ballXVector *= -1;
@@ -63,6 +65,26 @@ void initializeBall() {
   if (ballYMagnitude == 1) {
     ballYVector *= -1;
   }
+
+  matrix.drawPixel((int)ballXPos, (int)ballYPos, matrix.Color(0, 0, 20));
+  delay(200);
+  matrix.show();
+
+  matrix.drawPixel((int)ballXPos, (int)ballYPos, 0);
+  delay(200);
+  matrix.show();
+
+  matrix.drawPixel((int)ballXPos, (int)ballYPos, matrix.Color(0, 0, 20));
+  delay(200);
+  matrix.show();
+
+  matrix.drawPixel((int)ballXPos, (int)ballYPos, 0);
+  delay(200);
+  matrix.show();
+
+  matrix.drawPixel((int)ballXPos, (int)ballYPos, matrix.Color(0, 0, 20));
+  delay(200);
+  matrix.show();
 }
 
 void leftPaddle() {
@@ -81,12 +103,63 @@ void checkCollisions() {
   
   //left/right
   if ((int)ballXPos <= 0 || (int)ballXPos >= 15) {
-    ballXVector *= -1;
+    resetGame();
   }
 
   //left paddle
-
+  if ((int)ballXPos == 1) {
+    if ((int)ballYPos == leftPaddlePosition) {
+      ballXVector *= -1;
+      if (ballYVector <= 122) {
+        ballYVector += 5;
+      }
+      else {
+        ballYVector = 127;
+      }
+      speedUpBall();
+    }
+    if ((int)ballYPos == (leftPaddlePosition + 1)) {
+      ballXVector *= -1;
+      speedUpBall();
+    }
+    if ((int)ballYPos == (leftPaddlePosition + 2)) {
+      ballXVector *= -1;
+      if (ballYVector >= -123) {
+        ballYVector -= 5;
+      }
+      else {
+        ballYVector = -128;
+      }
+      speedUpBall();
+    }
+  }
   //right paddle
+  if ((int)ballXPos == 14) {
+    if ((int)ballYPos == rightPaddlePosition) {
+      ballXVector *= -1;
+      if (ballYVector <= 122) {
+        ballYVector += 5;
+      }
+      else {
+        ballYVector = 127;
+      }
+      speedUpBall();
+    }
+    if ((int)ballYPos == (rightPaddlePosition + 1)) {
+      ballXVector *= -1;
+      speedUpBall();
+    }
+    if ((int)ballYPos == (rightPaddlePosition + 2)) {
+      ballXVector *= -1;
+      if (ballYVector >= -123) {
+        ballYVector -= 5;
+      }
+      else {
+        ballYVector = -128;
+      }
+      speedUpBall();
+    }
+  }
 }
 
 void updateBall() {
@@ -102,16 +175,25 @@ void updateBall() {
   Serial.println(ballYPos, 10);
 }
 
-void drawScreen() {
-  matrix.drawPixel(0, leftPaddlePosition, matrix.Color(0, 0, 255));
-  matrix.drawPixel(0, (leftPaddlePosition + 1), matrix.Color(0, 0, 255));
-  matrix.drawPixel(0, (leftPaddlePosition + 2), matrix.Color(0, 0, 255));
-  
-  matrix.drawPixel(15, rightPaddlePosition, matrix.Color(0, 0, 255));
-  matrix.drawPixel(15, (rightPaddlePosition + 1), matrix.Color(0, 0, 255));
-  matrix.drawPixel(15, (rightPaddlePosition + 2), matrix.Color(0, 0, 255));
+void speedUpBall() {
+  if (ballXVector < 0 && ballXVector >= (-128 + ballSpeedUpRate)) {
+    ballXVector -= ballSpeedUpRate;
+  }
+  else if (ballXVector <= (127 - ballSpeedUpRate)) {
+    ballXVector += ballSpeedUpRate;
+  }
+}
 
-  matrix.drawPixel((int)ballXPos, (int)ballYPos, matrix.Color(0, 0, 255));
+void drawScreen() {
+  matrix.drawPixel(0, leftPaddlePosition, matrix.Color(0, 0, 20));
+  matrix.drawPixel(0, (leftPaddlePosition + 1), matrix.Color(0, 0, 20));
+  matrix.drawPixel(0, (leftPaddlePosition + 2), matrix.Color(0, 0, 20));
+  
+  matrix.drawPixel(15, rightPaddlePosition, matrix.Color(0, 0, 20));
+  matrix.drawPixel(15, (rightPaddlePosition + 1), matrix.Color(0, 0, 20));
+  matrix.drawPixel(15, (rightPaddlePosition + 2), matrix.Color(0, 0, 20));
+
+  matrix.drawPixel((int)ballXPos, (int)ballYPos, matrix.Color(0, 0, 20));
   
   matrix.show();
 }
