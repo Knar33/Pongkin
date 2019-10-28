@@ -2,11 +2,18 @@
 #include <Adafruit_NeoMatrix.h>
 #include <Adafruit_NeoPixel.h>
 
-Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(16, 16, 6,
+#define paddle1Pin A0
+#define paddle2Pin A1
+#define ledPin 6
+
+Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(16, 16, ledPin, 
 NEO_MATRIX_TOP + NEO_MATRIX_LEFT +
 NEO_MATRIX_COLUMNS + NEO_MATRIX_ZIGZAG,
 NEO_GRB + NEO_KHZ800);
 
+unsigned long startMillis;
+unsigned long currentMillis;
+const unsigned long period = 35;
 int leftPaddlePosition;
 int rightPaddlePosition;
 float ballXPos;
@@ -20,7 +27,7 @@ float ballSpeed = 0.003;
 int startingBallSpeed = 30;
 int ballSpeedUpRate = 5;
 int ballDeflectionSpeedUpRate = 5;
-uint16_t pixelColor = matrix.Color(0, 0, 255);
+uint16_t pixelColor = matrix.Color(0, 0, 20);
 
 void setup() {
   Serial.begin(9600);
@@ -31,13 +38,17 @@ void setup() {
 }
 
 void loop() {
-  matrix.fillScreen(0);
-  
-  leftPaddle();
-  rightPaddle();
-  checkCollisions();
-  updateBall();
-  drawScreen();
+  currentMillis = millis();
+  if (currentMillis - startMillis >= period)
+  {
+    matrix.fillScreen(0);
+    leftPaddle();
+    rightPaddle();
+    checkCollisions();
+    updateBall();
+    drawScreen();
+    startMillis = currentMillis;
+  }
 }
 
 void introScreen() {
@@ -90,11 +101,11 @@ void initializeBall() {
 }
 
 void leftPaddle() {
-  leftPaddlePosition = (analogRead(A0) / (float)1023) * 13;
+  leftPaddlePosition = (analogRead(paddle1Pin) / (float)1023) * 13;
 }
 
 void rightPaddle() {
-  rightPaddlePosition = (analogRead(A1) / (float)1023) * 13;
+  rightPaddlePosition = (analogRead(paddle2Pin) / (float)1023) * 13;
 }
 
 void checkCollisions() {
