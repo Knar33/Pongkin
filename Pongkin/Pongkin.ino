@@ -27,7 +27,7 @@ float ballSpeed = 0.003;
 int startingBallSpeed = 30;
 int ballSpeedUpRate = 5;
 int ballDeflectionSpeedUpRate = 5;
-uint16_t pixelColor = matrix.Color(0, 0, 20);
+uint16_t pixelColor = matrix.Color(255, 0, 255);
 
 void setup() {
   Serial.begin(9600);
@@ -109,8 +109,13 @@ void rightPaddle() {
 }
 
 void checkCollisions() {
-  //top/bottom walls
-  if ((int)ballYPos <= 0 || (int)ballYPos >= 15) {
+  //top wall
+  if ((int)ballYPos <= 0 && ballYVector < 0) {
+    ballYVector *= -1;
+  }
+  
+  //bottom wall
+  if ((int)ballYPos >= 15 && ballYVector > 0) {
     ballYVector *= -1;
   }
   
@@ -120,7 +125,7 @@ void checkCollisions() {
   }
 
   //left paddle
-  if ((int)ballXPos == 1) {
+  if ((int)ballXPos == 1 && ballXVector < 0) {
     if ((int)ballYPos == leftPaddlePosition) {
       ballXVector *= -1;
       if (ballYVector <= (127 - ballDeflectionSpeedUpRate)) {
@@ -148,7 +153,7 @@ void checkCollisions() {
   }
   
   //right paddle
-  if ((int)ballXPos == 14) {
+  if ((int)ballXPos == 14 && ballXVector > 0) {
     if ((int)ballYPos == rightPaddlePosition) {
       ballXVector *= -1;
       if (ballYVector <= (127 - ballDeflectionSpeedUpRate)) {
@@ -177,13 +182,8 @@ void checkCollisions() {
 }
 
 void updateBall() {
-  if (ballXVector != (float)0) {
     ballXPos += (float)ballXVector * (float)ballSpeed;
-  }
-  
-  if (ballYVector != (float)0) {
     ballYPos += (float)ballYVector * (float)ballSpeed;
-  }
 }
 
 void speedUpBall() {
