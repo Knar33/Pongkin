@@ -54,15 +54,21 @@ void initializeBall() {
   ballXPos = (float)startingPositions[randomPosition][0];
   ballYPos = (float)startingPositions[randomPosition][1];
   
-  ballXVector = random(-128, 127);
-  while(ballXVector == 0) {
-    ballXVector = random(-128, 127);
+  ballXVector = random(1, 128);
+  int ballXMagnitude = random(0, 2);
+  if (ballXMagnitude == 1) {
+    ballXVector *= -1;
   }
-  
-  ballYVector = random(-128, 127);
-  while(ballYVector == 0) {
-    ballYVector = random(-128, 127);
+  ballYVector = random(1, 128);
+  int ballYMagnitude = random(0, 2);
+  if (ballYMagnitude == 1) {
+    ballYVector *= -1;
   }
+
+  Serial.println(ballXVector, 10);
+  delay(5000);
+  Serial.println(ballYVector, 10);
+  delay(5000);
 }
 
 void leftPaddle() {
@@ -78,20 +84,14 @@ void checkCollisions() {
 }
 
 void updateBall() {
-  if (ballXVector > 0) {
+  if (ballXVector != (float)0) {
     ballXPos += (float)ballXVector * (float)ballSpeed;
   }
-  else if (ballXVector != 0) {
-    ballXPos -= (float)ballXVector * (float)ballSpeed;
-  }
   
-  if (ballYVector > 0) {
+  if (ballYVector != (float)0) {
     ballYPos += (float)ballYVector * (float)ballSpeed;
   }
-  else if (ballYVector != 0) {
-    ballYPos -= (float)ballYVector * (float)ballSpeed;
-  }
-
+  
   Serial.println(ballXPos, 10);
   Serial.println(ballYPos, 10);
 }
@@ -105,7 +105,7 @@ void drawScreen() {
   matrix.drawPixel(15, (rightPaddlePosition + 1), matrix.Color(0, 0, 255));
   matrix.drawPixel(15, (rightPaddlePosition + 2), matrix.Color(0, 0, 255));
 
-  matrix.drawPixel(ballXPos, ballYPos, matrix.Color(0, 0, 255));
+  matrix.drawPixel((int)ballXPos, (int)ballYPos, matrix.Color(0, 0, 255));
   
   matrix.show();
 }
