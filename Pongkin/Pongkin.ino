@@ -9,8 +9,8 @@ NEO_GRB + NEO_KHZ800);
 
 int leftPaddlePosition;
 int rightPaddlePosition;
-int ballXPos;
-int ballYPos;
+long ballXPos;
+long ballYPos;
 char ballXVector;
 char ballYVector
 int leftScore;
@@ -46,8 +46,10 @@ void resetGame() {
 }
 
 void initializeBall() {
-  ballXPos = random(7, 8);
-  ballYPos = random(7, 8);
+  ballXPos = (long)random(7, 8);
+  ballYPos = (long)random(7, 8);
+  ballXVector = random(-128, 127);
+  ballYVector = random(-128, 127);
 }
 
 void leftPaddle() {
@@ -70,8 +72,12 @@ void drawScreen() {
   matrix.drawPixel(0, num1, matrix.Color(0, 0, 255));
   matrix.drawPixel(0, (num1 + 1), matrix.Color(0, 0, 255));
   matrix.drawPixel(0, (num1 + 2), matrix.Color(0, 0, 255));
+  
   matrix.drawPixel(15, num2, matrix.Color(0, 0, 255));
   matrix.drawPixel(15, (num2 + 1), matrix.Color(0, 0, 255));
   matrix.drawPixel(15, (num2 + 2), matrix.Color(0, 0, 255));
+
+  matrix.drawPixel(ballXPos, ballYPos, matrix.Color(0, 0, 255));
+  
   matrix.show();
 }
