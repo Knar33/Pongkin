@@ -13,6 +13,7 @@ long ballXPos;
 long ballYPos;
 char ballXVector;
 char ballYVector;
+long ballSpeed = .0025;
 int leftScore;
 int rightScore;
 int startingPositions[][4] = { {7, 7}, {7, 8}, {8, 7}, {8, 8} };
@@ -50,9 +51,7 @@ void resetGame() {
 void initializeBall() {
   int randomPosition = random(4);
   ballXPos = (long)startingPositions[randomPosition][0];
-  Serial.print(ballXPos);
   ballYPos = (long)startingPositions[randomPosition][1];
-  Serial.print(ballYPos);
   ballXVector = random(-128, 127);
   ballYVector = random(-128, 127);
 }
