@@ -12,7 +12,7 @@ int rightPaddlePosition;
 long ballXPos;
 long ballYPos;
 char ballXVector;
-char ballYVector
+char ballYVector;
 int leftScore;
 int rightScore;
 
@@ -20,7 +20,7 @@ void setup() {
   Serial.begin(9600);
   matrix.begin();
   introScreen();
-  resetGame()
+  resetGame();
 }
 
 void loop() {
@@ -47,7 +47,9 @@ void resetGame() {
 
 void initializeBall() {
   ballXPos = (long)random(7, 8);
+  Serial.write(ballXPos);
   ballYPos = (long)random(7, 8);
+  Serial.write(ballYPos);
   ballXVector = random(-128, 127);
   ballYVector = random(-128, 127);
 }
@@ -69,13 +71,13 @@ void updateBall() {
 }
 
 void drawScreen() {
-  matrix.drawPixel(0, num1, matrix.Color(0, 0, 255));
-  matrix.drawPixel(0, (num1 + 1), matrix.Color(0, 0, 255));
-  matrix.drawPixel(0, (num1 + 2), matrix.Color(0, 0, 255));
+  matrix.drawPixel(0, leftPaddlePosition, matrix.Color(0, 0, 255));
+  matrix.drawPixel(0, (leftPaddlePosition + 1), matrix.Color(0, 0, 255));
+  matrix.drawPixel(0, (leftPaddlePosition + 2), matrix.Color(0, 0, 255));
   
-  matrix.drawPixel(15, num2, matrix.Color(0, 0, 255));
-  matrix.drawPixel(15, (num2 + 1), matrix.Color(0, 0, 255));
-  matrix.drawPixel(15, (num2 + 2), matrix.Color(0, 0, 255));
+  matrix.drawPixel(15, rightPaddlePosition, matrix.Color(0, 0, 255));
+  matrix.drawPixel(15, (rightPaddlePosition + 1), matrix.Color(0, 0, 255));
+  matrix.drawPixel(15, (rightPaddlePosition + 2), matrix.Color(0, 0, 255));
 
   matrix.drawPixel(ballXPos, ballYPos, matrix.Color(0, 0, 255));
   
