@@ -15,10 +15,12 @@ char ballXVector;
 char ballYVector;
 int leftScore;
 int rightScore;
+int startingPositions[][4] = { {7, 7}, {7, 8}, {8, 7}, {8, 8} };
 
 void setup() {
   Serial.begin(9600);
   matrix.begin();
+  randomSeed(analogRead(2));
   introScreen();
   resetGame();
 }
@@ -46,9 +48,10 @@ void resetGame() {
 }
 
 void initializeBall() {
-  ballXPos = (long)random(7, 9);
+  int randomPosition = random(4);
+  ballXPos = (long)startingPositions[randomPosition][0];
   Serial.print(ballXPos);
-  ballYPos = (long)random(7, 9);
+  ballYPos = (long)startingPositions[randomPosition][1];
   Serial.print(ballYPos);
   ballXVector = random(-128, 127);
   ballYVector = random(-128, 127);
