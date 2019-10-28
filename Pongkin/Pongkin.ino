@@ -46,10 +46,10 @@ void resetGame() {
 }
 
 void initializeBall() {
-  ballXPos = (long)random(7, 8);
-  Serial.write(ballXPos);
-  ballYPos = (long)random(7, 8);
-  Serial.write(ballYPos);
+  ballXPos = (long)random(7, 9);
+  Serial.print(ballXPos);
+  ballYPos = (long)random(7, 9);
+  Serial.print(ballYPos);
   ballXVector = random(-128, 127);
   ballYVector = random(-128, 127);
 }
