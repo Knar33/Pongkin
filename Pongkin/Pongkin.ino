@@ -19,6 +19,7 @@ int startingPositions[][4] = { {7, 7}, {7, 8}, {8, 7}, {8, 8} };
 float ballSpeed = 0.003;
 int startingBallSpeed = 30;
 int ballSpeedUpRate = 5;
+int ballDeflectionSpeedUpRate = 5;
 uint16_t pixelColor = matrix.Color(0, 0, 255);
 
 void setup() {
@@ -51,8 +52,8 @@ void resetGame() {
 }
 
 void initializeBall() {
+  //This was done because generating 2 random numbers back to back gave the same random number every time.
   int randomPosition = random(4);
-  
   ballXPos = (float)startingPositions[randomPosition][0];
   ballYPos = (float)startingPositions[randomPosition][1];
   
@@ -97,12 +98,12 @@ void rightPaddle() {
 }
 
 void checkCollisions() {
-  //top/bottom
+  //top/bottom walls
   if ((int)ballYPos <= 0 || (int)ballYPos >= 15) {
     ballYVector *= -1;
   }
   
-  //left/right
+  //left/right walls
   if ((int)ballXPos <= 0 || (int)ballXPos >= 15) {
     resetGame();
   }
@@ -111,8 +112,8 @@ void checkCollisions() {
   if ((int)ballXPos == 1) {
     if ((int)ballYPos == leftPaddlePosition) {
       ballXVector *= -1;
-      if (ballYVector <= 122) {
-        ballYVector += 5;
+      if (ballYVector <= (127 - ballDeflectionSpeedUpRate)) {
+        ballYVector += ballDeflectionSpeedUpRate;
       }
       else {
         ballYVector = 127;
@@ -125,8 +126,8 @@ void checkCollisions() {
     }
     if ((int)ballYPos == (leftPaddlePosition + 2)) {
       ballXVector *= -1;
-      if (ballYVector >= -123) {
-        ballYVector -= 5;
+      if (ballYVector >= (-128 + ballDeflectionSpeedUpRate)) {
+        ballYVector -= ballDeflectionSpeedUpRate;
       }
       else {
         ballYVector = -128;
@@ -134,12 +135,13 @@ void checkCollisions() {
       speedUpBall();
     }
   }
+  
   //right paddle
   if ((int)ballXPos == 14) {
     if ((int)ballYPos == rightPaddlePosition) {
       ballXVector *= -1;
-      if (ballYVector <= 122) {
-        ballYVector += 5;
+      if (ballYVector <= (127 - ballDeflectionSpeedUpRate)) {
+        ballYVector += ballDeflectionSpeedUpRate;
       }
       else {
         ballYVector = 127;
@@ -152,8 +154,8 @@ void checkCollisions() {
     }
     if ((int)ballYPos == (rightPaddlePosition + 2)) {
       ballXVector *= -1;
-      if (ballYVector >= -123) {
-        ballYVector -= 5;
+      if (ballYVector >= (-128 + ballDeflectionSpeedUpRate)) {
+        ballYVector -= ballDeflectionSpeedUpRate;
       }
       else {
         ballYVector = -128;
