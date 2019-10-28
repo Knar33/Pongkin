@@ -9,11 +9,11 @@ NEO_GRB + NEO_KHZ800);
 
 int leftPaddlePosition;
 int rightPaddlePosition;
-long ballXPos;
-long ballYPos;
+float ballXPos;
+float ballYPos;
 char ballXVector;
 char ballYVector;
-long ballSpeed = .0025;
+float ballSpeed = 0.001;
 int leftScore;
 int rightScore;
 int startingPositions[][4] = { {7, 7}, {7, 8}, {8, 7}, {8, 8} };
@@ -50,18 +50,27 @@ void resetGame() {
 
 void initializeBall() {
   int randomPosition = random(4);
-  ballXPos = (long)startingPositions[randomPosition][0];
-  ballYPos = (long)startingPositions[randomPosition][1];
+  
+  ballXPos = (float)startingPositions[randomPosition][0];
+  ballYPos = (float)startingPositions[randomPosition][1];
+  
   ballXVector = random(-128, 127);
+  while(ballXVector == 0) {
+    ballXVector = random(-128, 127);
+  }
+  
   ballYVector = random(-128, 127);
+  while(ballYVector == 0) {
+    ballYVector = random(-128, 127);
+  }
 }
 
 void leftPaddle() {
-  int leftPaddlePosition = (analogRead(A0) / (float)1023) * 13;
+  leftPaddlePosition = (analogRead(A0) / (float)1023) * 13;
 }
 
 void rightPaddle() {
-  int rightPaddlePosition = (analogRead(A1) / (float)1023) * 13;
+  rightPaddlePosition = (analogRead(A1) / (float)1023) * 13;
 }
 
 void checkCollisions() {
@@ -69,7 +78,22 @@ void checkCollisions() {
 }
 
 void updateBall() {
+  if (ballXVector > 0) {
+    ballXPos += (float)ballXVector * (float)ballSpeed;
+  }
+  else if (ballXVector != 0) {
+    ballXPos -= (float)ballXVector * (float)ballSpeed;
+  }
   
+  if (ballYVector > 0) {
+    ballYPos += (float)ballYVector * (float)ballSpeed;
+  }
+  else if (ballYVector != 0) {
+    ballYPos -= (float)ballYVector * (float)ballSpeed;
+  }
+
+  Serial.println(ballXPos, 10);
+  Serial.println(ballYPos, 10);
 }
 
 void drawScreen() {
