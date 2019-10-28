@@ -17,8 +17,9 @@ int leftScore;
 int rightScore;
 int startingPositions[][4] = { {7, 7}, {7, 8}, {8, 7}, {8, 8} };
 float ballSpeed = 0.003;
-int startingBallSpeed = 50;
+int startingBallSpeed = 30;
 int ballSpeedUpRate = 5;
+uint16_t pixelColor = matrix.Color(0, 0, 255);
 
 void setup() {
   Serial.begin(9600);
@@ -39,7 +40,7 @@ void loop() {
 }
 
 void introScreen() {
-  matrix.drawPixel(0, 0, matrix.Color(0, 0, 255));
+  matrix.drawPixel(0, 0, pixelColor);
   matrix.show();
 }
 
@@ -66,7 +67,7 @@ void initializeBall() {
     ballYVector *= -1;
   }
 
-  matrix.drawPixel((int)ballXPos, (int)ballYPos, matrix.Color(0, 0, 20));
+  matrix.drawPixel((int)ballXPos, (int)ballYPos, pixelColor);
   delay(200);
   matrix.show();
 
@@ -74,7 +75,7 @@ void initializeBall() {
   delay(200);
   matrix.show();
 
-  matrix.drawPixel((int)ballXPos, (int)ballYPos, matrix.Color(0, 0, 20));
+  matrix.drawPixel((int)ballXPos, (int)ballYPos, pixelColor);
   delay(200);
   matrix.show();
 
@@ -82,7 +83,7 @@ void initializeBall() {
   delay(200);
   matrix.show();
 
-  matrix.drawPixel((int)ballXPos, (int)ballYPos, matrix.Color(0, 0, 20));
+  matrix.drawPixel((int)ballXPos, (int)ballYPos, pixelColor);
   delay(200);
   matrix.show();
 }
@@ -170,9 +171,6 @@ void updateBall() {
   if (ballYVector != (float)0) {
     ballYPos += (float)ballYVector * (float)ballSpeed;
   }
-  
-  Serial.println(ballXPos, 10);
-  Serial.println(ballYPos, 10);
 }
 
 void speedUpBall() {
@@ -185,15 +183,15 @@ void speedUpBall() {
 }
 
 void drawScreen() {
-  matrix.drawPixel(0, leftPaddlePosition, matrix.Color(0, 0, 20));
-  matrix.drawPixel(0, (leftPaddlePosition + 1), matrix.Color(0, 0, 20));
-  matrix.drawPixel(0, (leftPaddlePosition + 2), matrix.Color(0, 0, 20));
+  matrix.drawPixel(0, leftPaddlePosition, pixelColor);
+  matrix.drawPixel(0, (leftPaddlePosition + 1), pixelColor);
+  matrix.drawPixel(0, (leftPaddlePosition + 2), pixelColor);
   
-  matrix.drawPixel(15, rightPaddlePosition, matrix.Color(0, 0, 20));
-  matrix.drawPixel(15, (rightPaddlePosition + 1), matrix.Color(0, 0, 20));
-  matrix.drawPixel(15, (rightPaddlePosition + 2), matrix.Color(0, 0, 20));
+  matrix.drawPixel(15, rightPaddlePosition, pixelColor);
+  matrix.drawPixel(15, (rightPaddlePosition + 1), pixelColor);
+  matrix.drawPixel(15, (rightPaddlePosition + 2), pixelColor);
 
-  matrix.drawPixel((int)ballXPos, (int)ballYPos, matrix.Color(0, 0, 20));
+  matrix.drawPixel((int)ballXPos, (int)ballYPos, pixelColor);
   
   matrix.show();
 }
