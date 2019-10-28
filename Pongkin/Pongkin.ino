@@ -7,11 +7,21 @@ NEO_MATRIX_TOP + NEO_MATRIX_LEFT +
 NEO_MATRIX_COLUMNS + NEO_MATRIX_ZIGZAG,
 NEO_GRB + NEO_KHZ800);
 
+int leftPaddlePosition;
+int rightPaddlePosition;
+int ballXPos;
+int ballYPos;
+char ballXVector;
+char ballYVector
+int leftScore;
+int rightScore;
+
 void setup() {
   Serial.begin(9600);
   matrix.begin();
   matrix.drawPixel(0, 0, matrix.Color(0, 0, 255));
   matrix.show();
+  resetGame()
 }
 
 void loop() {
