@@ -71,6 +71,10 @@ void setup() {
   Serial.begin(9600);
   matrix.begin();
   randomSeed(analogRead(2));
+  displayGraphic(knarLogo);
+  delay(1000);
+  displayGraphic(matrexLogo);
+  delay(1000);
   resetGame();
 }
 
@@ -89,6 +93,7 @@ void loop() {
 }
 
 void displayGraphic(uint16_t graphicArray[]) {
+  Serial.print(graphicArray[160]);
   for (int y = 0; y < 16; y++) {
     for (int x = 0; x < 16; x++) {
       int coord = (16 * y) + x;
